@@ -1,0 +1,28 @@
+graph TD
+    subgraph "Formatters-KMP"
+        TF[TextFormat<br/>data class]
+        TP[TextParser<br/>interface]
+        PD[ParsedDocument<br/>lazy HTML cache]
+        FR[FormatRegistry<br/>configurable]
+        PR[ParserRegistry<br/>lazy loading]
+        PO[ParseOptions<br/>builder]
+    end
+
+    subgraph "Consumer (e.g., Yole)"
+        MP[MarkdownParser]
+        LP[LaTeXParser]
+        CP[CSVParser]
+        APP[Application]
+    end
+
+    APP -->|creates| FR
+    APP -->|creates| PR
+    APP -->|registers| TF
+    FR -->|detects| TF
+    PR -->|stores| TP
+    MP -->|implements| TP
+    LP -->|implements| TP
+    CP -->|implements| TP
+    TP -->|produces| PD
+    PD -->|references| TF
+    PO -->|configures| TP

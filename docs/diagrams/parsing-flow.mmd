@@ -1,0 +1,24 @@
+sequenceDiagram
+    participant App as Application
+    participant FR as FormatRegistry
+    participant PR as ParserRegistry
+    participant TP as TextParser
+    participant PD as ParsedDocument
+
+    App->>FR: detectByFilename("doc.md")
+    FR-->>App: TextFormat(id="markdown")
+
+    App->>PR: getParser(format)
+    PR-->>App: MarkdownParser
+
+    App->>TP: parse(content, options)
+    TP-->>App: ParsedDocument
+
+    Note over PD: HTML not generated yet
+
+    App->>PD: toHtml(lightMode=true)
+    PD->>PD: Generate via injected generator
+    PD-->>App: "<div>...</div>"
+
+    App->>PD: toHtml(lightMode=true)
+    PD-->>App: Cached HTML (instant)
